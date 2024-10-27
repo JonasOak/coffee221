@@ -1,0 +1,83 @@
+<?php
+# BY - JONAS
+$title = "CRUD - Produtos";
+include "../include/header.php";
+include '../include/database.php';
+
+if (isset($_GET['cadastrar']) and $_GET['cadastrar'] == 'send') {
+    $inf = "INSERT INTO produto (`nome_produto`,`descricao`,`categoria`,`marca`)
+    VALUES ('{$_GET['nome_produto']}','{$_GET['descricao']}','{$_GET['categoria']}','{$_GET['marca']}')";
+    $query = mysqli_query($con, $inf);
+    header("location: relatorio_produto.php?cadastrar=sucesso");
+}
+$inf2 = "SELECT * FROM produto GROUP BY categoria";
+$query = mysqli_query($con, $inf2);
+$resultado = mysqli_fetch_all($query, MYSQLI_ASSOC);
+?>
+
+<body class="text-center">
+    <main class="form-signin">
+        <form action="" method="get">
+            <h1 class="h3 mb-3 fw-normal" style="margin-top: 1cm;">Cadastro de produtos</h1>
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-6">
+                        <div class="col-12">
+                            <div class="form-floating" style="margin-top: 1cm;">
+                                <input type="text" class="form-control" name="nome_produto">
+                                <label for="exampleFormControlInput1" class="form-label"><strong>Produto</strong></label>
+                            </div>
+                            <div class="form-floating">
+                                <input type="text" class="form-control" name="descricao">
+                                <label for="exampleFormControlInput1" class="form-label"><strong>Descrição</strong></label>
+                            </div>
+                            <div class="form-floating">
+                                <!--<input type="text" class="form-control" name="categoria">
+                                <label for="exampleFormControlInput1" class="form-label"><strong>Categoria</strong></label>-->
+                                <label for="select" class="form-label"></label>
+                                <select class="form-select" name="categoria" required="">
+                                    <?php
+                                    $temRoupa = false;
+                                    $temAlimento = false;
+                                    
+                                    foreach ($resultado as $produtos) {
+                                        if (isset($produtos['categoria'])) {
+                                            if ($produtos['categoria'] == 'roupa') {
+                                                $temRoupa = true;
+                                            }
+                                            if ($produtos['categoria'] == 'alimento') {
+                                                $temAlimento = true;
+                                            }
+                                        }
+                                    }    
+                                    echo "<option value='roupa'" . ($temRoupa ? " selected" : "") . ">roupa</option>";
+                                    echo "<option value='alimento'" . ($temAlimento ? " selected" : "") . ">alimento</option>";
+                                    ?>
+                                    <div class="invalid-feedback">
+                                        Por favor, selecione um produto válido.
+                                    </div>
+                                </select>
+                            </div>
+                            <div class="form-floating" style="margin-bottom: 5mm;">
+                                <input type="text" class="form-control" name="marca">
+                                <label for="exampleFormControlInput1" class="form-label"><strong>Fabricante</strong></label>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-6">
+                                    <a class="w-100 btn btn-lg btn-primary" style="margin-bottom: 5mm;" href="relatorio_produto.php">Voltar</a>
+                                </div>
+                                <div class="col-6">
+                                    <button class="w-100 btn btn-lg btn-primary" style="margin-bottom: 5mm;" type="submit" value="send" name="cadastrar">Enviar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </main>
+
+    <?php
+    include "../include/footer.php";
+    ?>
