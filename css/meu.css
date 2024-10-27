@@ -1,0 +1,17 @@
+	.bianca{
+		background-color: #ffc107;
+	}
+	#card{
+		width:360px ;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		margin-right: -50%;
+		transform: translate(-50%, -50%)
+	}
+	.bia{
+		min-height: 50px;
+	}
+	.car{
+		min-height: 55px;
+	}
